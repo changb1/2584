@@ -55,6 +55,10 @@ public:
 	 *  '93.7%': 93.7% (937 games) reached 8192-tiles (a.k.a. win rate of 8192-tile)
 	 *  '22.4%': 22.4% (224 games) terminated with 8192-tiles (the largest)
 	 */
+	static int fibonacci(int i){
+		int fib[]={0,1,2,3,5,8,13,21,34,55,89,144,233,377,610,987,1597,2584,4181,6765,10946,17711,28657,46368,75025};
+		return fib[i];
+	}
 	void show(bool tstat = true) const {
 		size_t blk = std::min(data.size(), block);
 		size_t stat[64] = { 0 };
@@ -91,7 +95,7 @@ public:
 		for (size_t t = 0, c = 0; c < blk; c += stat[t++]) {
 			if (stat[t] == 0) continue;
 			unsigned accu = std::accumulate(std::begin(stat) + t, std::end(stat), 0);
-			std::cout << "\t" << ((1 << t) & -2u); // type
+			std::cout << "\t" << ((fibonacci(t))); // type//used to have & -2u after fibo
 			std::cout << "\t" << (accu * 100.0 / blk) << "%"; // win rate
 			std::cout << "\t" "(" << (stat[t] * 100.0 / blk) << "%" ")"; // percentage of ending
 			std::cout << std::endl;
@@ -132,6 +136,7 @@ public:
 	episode& back() {
 		return data.back();
 	}
+	
 
 	friend std::ostream& operator <<(std::ostream& out, const statistic& stat) {
 		for (const episode& rec : stat.data) out << rec << std::endl;
