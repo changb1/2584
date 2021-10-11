@@ -47,6 +47,10 @@ public:
 
 	data info() const { return attr; }
 	data info(data dat) { data old = attr; attr = dat; return old; }
+	static int fibonacci(int i){
+		int fib[]={0,1,2,3,5,8,13,21,34,55,89,144,233,377,610,987,1597,2584,4181,6765,10946,17711,28657,46368,75025};
+		return fib[i];
+	}
 
 public:
 	bool operator ==(const board& b) const { return tile == b.tile; }
@@ -86,6 +90,7 @@ public:
 	reward slide_left() {
 		board prev = *this;
 		reward score = 0;
+		/*original code here
 		for (int r = 0; r < 4; r++) {
 			auto& row = tile[r];
 			int top = 0, hold = 0;
@@ -108,6 +113,7 @@ public:
 			}
 			if (hold) tile[r][top] = hold;
 		}
+		*/
 		return (*this != prev) ? score : -1;
 	}
 	reward slide_right() {
