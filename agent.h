@@ -96,11 +96,11 @@ private:
  * dummy player
  * select a legal action randomly
  */
-int rd = 0;//added function roundabout method
+//int rd = 0;//added function roundabout method
 class player : public random_agent {
 public:
-	player(const std::string& args = "") : random_agent("name=dummy role=player " + args),
-		opcode({ rd%4, (rd+1)%4, (rd+2)%4, (rd+3)%4 }) {}
+	player(const std::string& args = "") : random_agent("name=greedy role=player " + args),
+		opcode({ 0, 1, 2, 3 }) {}
 	/*
 	virtual action take_action(const board& before) {
 		std::shuffle(opcode.begin(), opcode.end(), engine);
@@ -113,12 +113,25 @@ public:
 	*/
 	virtual action take_action(const board& before) {
 		//std::shuffle(opcode.begin(), opcode.end(), engine);
+		board::reward max_reward=-1;
+		int max_op=0;
+		//greedy???
 		for (int op : opcode) {
+			board::reward reward = board(before).slide(op);
+			if (reward > max_reward){
+				max_reward=reward;
+				max_op=op;
+			}
+			/*
 			board::reward reward = board(before).slide(op);
 			if (reward != -1){
 				rd=op+1;
 				return action::slide(op);
 			}
+			*/
+		}
+		if(max_reward != -1){
+			return  action::slide(max_op);
 		}
 		return action();
 	}
