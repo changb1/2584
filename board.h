@@ -90,6 +90,29 @@ public:
 	reward slide_left() {
 		board prev = *this;
 		reward score = 0;
+		for (int r = 0; r < 4; r++) {
+			auto& row = tile[r];
+			int top = 0, hold = 0;
+			for (int c = 0; c < 4; c++) {
+				int tile = row[c];
+				if (tile == 0) continue;
+				row[c] = 0;
+				if (hold) {
+					if (std::abs(tile - hold) == 1 || (tile == 1 && hold == 1 )) {
+						tile=std::max(tile,hold)+1;
+						row[top++]=tile;
+						score += fibonacci(tile);
+						hold = 0;
+					} else {
+						row[top++] = hold;
+						hold = tile;
+					}
+				} else {
+					hold = tile;
+				}
+			}
+			if (hold) tile[r][top] = hold;
+		}
 		/*original code here
 		for (int r = 0; r < 4; r++) {
 			auto& row = tile[r];
