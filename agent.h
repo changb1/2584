@@ -70,9 +70,9 @@ protected:
 /**
  * base agent for agents with weight tables and a learning rate
  */
-class weight_agent : public agent {
+class player : public agent {
 public:
-	weight_agent(const std::string& args = "") : agent(args), alpha(0) {
+	player(const std::string& args = "") : agent("name=dummy role=player " + args), alpha(0) {
 		if (meta.find("init") != meta.end())
 			init_weights(meta["init"]);
 		if (meta.find("load") != meta.end())
@@ -80,15 +80,27 @@ public:
 		if (meta.find("alpha") != meta.end())
 			alpha = float(meta["alpha"]);
 	}
-	virtual ~weight_agent() {
+	virtual ~player() {
 		if (meta.find("save") != meta.end())
 			save_weights(meta["save"]);
 	}
 
+	virtual action take_action(const board& before) {
+		
+		return action();
+	}
+
 protected:
 	virtual void init_weights(const std::string& info) {
-//		net.emplace_back(65536); // create an empty weight table with size 65536
-//		net.emplace_back(65536); // create an empty weight table with size 65536
+
+		net.emplace_back(25*25*25*25);
+		net.emplace_back(25*25*25*25);
+		net.emplace_back(25*25*25*25);
+		net.emplace_back(25*25*25*25);
+		net.emplace_back(25*25*25*25);
+		net.emplace_back(25*25*25*25);
+		net.emplace_back(25*25*25*25);
+		net.emplace_back(25*25*25*25);
 	}
 	virtual void load_weights(const std::string& path) {
 		std::ifstream in(path, std::ios::in | std::ios::binary);
@@ -143,9 +155,9 @@ private:
  * dummy player
  * select a legal action randomly
  */
-class player : public random_agent {
+class dummy_player : public random_agent {
 public:
-	player(const std::string& args = "") : random_agent("name=dummy role=player " + args),
+	dummy_player(const std::string& args = "") : random_agent("name=dummy role=player " + args),
 		opcode({ 0, 1, 2, 3 }) {}
 
 	virtual action take_action(const board& before) {
@@ -159,4 +171,5 @@ public:
 
 private:
 	std::array<int, 4> opcode;
+
 };
